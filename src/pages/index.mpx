@@ -1,0 +1,85 @@
+<template>
+  <view class="title">todos</view>
+  <view class="todoapp">
+    <input class="input-view" placeholder="请输入待完成事项" wx:model="{{inputValue}}" bindconfirm="handleInputConfirm"/>
+    <button size="mini" bindtap="toggleAll(!isAllDone)">标记所有已完成</button>
+    <view>
+      <view wx:for="{{filteredTodo}}">
+        {{item.text}}-{{item.done?'已完成':'未完成'}}
+        <button size="mini" bindtap="toggleTodo(index)" style="display: inline-block">切换状态</button>
+        <button size="mini" bindtap="deleteTodo(index)" style="display: inline-block">删除</button>
+      </view>
+    </view>
+    <view wx:if="{{!isAllDone}}">还剩{{remainCount}}项</view>
+    <view style="margin-top: 20px">
+      <button size="mini" bindtap="deleteAllDone">清除全部已完成项</button>
+      <button size="mini" bindtap="setVisibility('all')">全部</button>
+      <button size="mini" bindtap="setVisibility('active')">待完成</button>
+      <button size="mini" bindtap="setVisibility('complete')">已完成</button>
+    </view>
+  </view>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+    import todoStore from '../store/todo'
+
+    const filter = {
+        all: todos => todos,
+        active: todos => todos.filter(item => !item.done),
+        complete: todos => todos.filter(item => item.done)
+    }
+    createPage({
+        data: { inputValue: '', visibility: 'active' },
+        computed: {
+            ...todoStore.mapState(['todoList']),
+            filteredTodo() {
+                return filter[this.visibility](this.todoList)
+            },
+            remainCount() {
+                return filter['active'](this.todoList).length
+            },
+            isAllDone() {
+                return this.todoList.every(item => item.done)
+            }
+        },
+        methods: {
+            ...todoStore.mapMutations(['addTodo', 'toggleTodo', 'deleteTodo', 'deleteAllDone', 'toggleAll']),
+            handleInputConfirm() {
+                console.log(this.inputValue)
+                this.addTodo(this.inputValue)
+                this.inputValue = ''
+            },
+            setVisibility(val) {
+                this.visibility = val
+            }
+        }
+    })
+</script>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+    }
+  }
+</script>
+<style lang="stylus">
+  .title {
+    font-size 80px
+    font-weight 100
+    text-align center
+    color rgba(175, 47, 47, 0.15)
+  }
+
+  .todoapp {
+    background: #fff;
+    margin: 60px 0 40px 0;
+    position: relative;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+
+    .input-view {
+      font-size 20px
+      padding 16px 16px 16px 50px
+    }
+  }
+</style>

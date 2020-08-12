@@ -1,0 +1,97 @@
+<script>
+    import mpx, { createApp } from '@mpxjs/core'
+    import apiProxy from '@mpxjs/api-proxy'
+
+    mpx.use(apiProxy, { usePromise: true })
+    // app.js
+    createApp({
+        onLaunch() {
+        }
+    })
+</script>
+<style>
+  page {
+    background-color: white;
+    font-size: 16px;
+    font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
+  }
+
+  .page__bd {
+    padding-bottom: 40px;
+  }
+
+  .page__bd_spacing {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  view-font {
+    font-size: 28 rpx;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+  }
+
+  text-font {
+    display: flex;
+    font-family: PingFangSC-Regular;
+    font-weight: 500;
+  }
+
+  .content-ver {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content-hor {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .content-center-hor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .single-line-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .button-view-center {
+    /** 一定宽度的按钮居中显示 **/
+    width: 70%;
+    margin: 10px auto;
+  }
+
+  .center-ver {
+    /** 垂直居中 **/
+    height: 50%;
+    margin: auto 0;
+  }
+</style>
+<!--<script type="application/json">-->
+<!--  {-->
+<!--    "pages": [-->
+<!--      "./pages/index"-->
+<!--    ]-->
+<!--  }-->
+<!--</script>-->
+
+<!--也可以通过以下形式用js输出json，便于书写注释和使用条件编译-->
+
+<script name="json">
+    // 可以写注释，通过defs注入的常量做一些判断之类的操作
+    module.exports = {
+        pages: [
+            './pages/poetry/poetry',
+            './pages/poetry/grade/grade',
+            './pages/poetry/grade/gradeDetail',
+            './pages/index'
+        ]
+    }
+</script>
+
+

@@ -1,0 +1,77 @@
+<template>
+  <block wx:for="{{grids}}" wx:key="*this" wx:for-index="idx">
+    <view bindtap="onItemClick" data-url="{{item.url}}">
+      <navigator url="{{item.url}}" class="weui-grid grid-item">
+        <view class="poetry-item">
+          <image class="poetry-banner" mode="widthFix" src="{{item.image}}"></image>
+          <view class="weui-grid__label grid-item_label">{{item.title}}</view>
+        </view>
+      </navigator>
+    </view>
+  </block>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+
+    createPage({
+        data: {
+            grids: [{
+                title: '课本古诗',
+                url: 'grade/grade',
+                image: "../../images/ic_bookmark.png"
+            }, {
+                title: '排行榜',
+                url: 'rank/rank',
+                image: '../../images/ic_grade.jpg'
+            }, {
+                title: '诗词分类',
+                url: 'mark/mark',
+                image: '../../images/ic_grade.jpg'
+            }, {
+                title: '作者合称',
+                url: 'hecheng/hecheng',
+                image: '../../images/ic_grade.jpg'
+            }, {
+                title: '史书典籍',
+                url: 'oldbook/oldbook',
+                image: '../../images/ic_grade.jpg'
+            }]
+        }
+    })
+</script>
+
+<style scoped>
+  @import "../../libs/weui.wxss";
+
+  .poetry-grid {
+    width: 90%;
+    margin: 10px 5%;
+    border-top: 1px;
+    border-left: 1px;
+  }
+
+  .grid-item {
+    width: 100%;
+    border-right: 1px;
+    border-bottom: 1px;
+    padding: 5px;
+  }
+
+  .poetry-banner {
+    width: 100%;
+    height: 120px;
+    display: block;
+    margin: 0 auto;
+    border-radius: 5px;
+  }
+
+  .grid-item_label {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    color: #29374c;
+    font-size: large;
+    font-weight: 700;
+  }
+</style>

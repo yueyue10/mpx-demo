@@ -1,0 +1,104 @@
+<template>
+  <view class="weui-grids home-grid">
+    <block wx:for="{{grids}}" wx:key="*this" wx:for-index="idx">
+      <view bindtap="onItemClick" data-title="{{item.title}}">
+        <view class="weui-grid grid-item">
+          <image class="grade-image" src="{{item.image}}"></image>
+          <view class="weui-grid__label grid-item_label">{{item.title}}</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+
+    createPage({
+        data: {
+            grids: [{
+                title: "一年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197034205.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "一年级下册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197067228.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "二年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197132664.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "二年级下册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197145199.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "三年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197196537.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "三年级下册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197231201.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "四年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197252358.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "五年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197300240.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "六年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197427727.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "七年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197458393.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "七年级下册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197484875.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "八年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573197635996.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "八年级下册",
+                image: 'http://www.shicimingju.com/pics/cate/1573200957563.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "九年级上册",
+                image: 'http://www.shicimingju.com/pics/cate/1573200985056.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }, {
+                title: "九年级下册",
+                image: 'http://www.shicimingju.com/pics/cate/1573201544093.jpg?x-oss-process=image/resize,m_lfit,h_200,w_200'
+            }]
+        },
+        methods: {
+            //item点击事件
+            onItemClick(e) {
+                // console.log(e)
+                let title = e.currentTarget.dataset.title
+                console.log(title)
+                wx.navigateTo({
+                    url: 'gradeDetail?title=' + title
+                })
+            }
+        }
+    })
+</script>
+
+<style scoped>
+  @import "../../../libs/weui.wxss";
+
+  .home-grid {
+    margin: 10px 15px;
+  }
+
+  .grid-item {
+    width: 25%;
+    padding: 5px 5px;
+    text-align: center;
+    border-right: 1px solid #e9e7ef;
+    border-bottom: 1px solid #e9e7ef;
+  }
+
+  .grade-image {
+    width: 76px;
+    height: 108px;
+  }
+
+  .grid-item_label {
+    margin-top: 0px;
+    font-size: 13px;
+  }
+</style>

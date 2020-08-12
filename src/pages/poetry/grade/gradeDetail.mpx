@@ -1,0 +1,90 @@
+<template>
+  <block wx:for="{{poetrysList}}" wx:key="*this" wx:for-item="poetry" wx:for-index="idx">
+    <view class="poetry-class" bindtap="onPoetryItemClick" data-index="{{idx}}">
+      <text class="poetry-line text-font poetry-title">{{poetry.title}}</text>
+      <view class="poetry-author">
+        <text class="poetry-line text-font">{{poetry.time}}</text>
+        <text class="poetry-line text-font">{{poetry.author}}</text>
+      </view>
+      <view class="content-ver">
+        <block wx:for="{{poetry.content}}" wx:key="*this">
+          <text class="poetry-line">{{item}}</text>
+        </block>
+      </view>
+    </view>
+  </block>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+
+    // const http = require('../../libs/httputils')   //相对路径
+    import { getRequest, postRequest } from '../../../libs/httputils'
+
+    createPage({
+        data: {
+            poetry1: {
+                title: '《咏鹅》',
+                time: '[唐]',
+                author: '骆宾王',
+                content: [
+                    '鹅，鹅，鹅，曲项向天歌。',
+                    '白毛浮绿水，红掌拨清波。'
+                ]
+            },
+            poetrysList: []
+        },
+        methods: {
+            onLoad(options) {
+                // console.log(options)
+                let title = decodeURIComponent(options.title)
+                wx.setNavigationBarTitle({
+                    title: title
+                })
+                getRequest('poetry/grade/poetryList', {}).then(res => {
+                    console.log("poetryList",res)
+                    this.poetrysList=res
+                }, err => {
+                    console.error(err)
+                })
+            },
+            //诗词列表点击监听
+            onPoetryItemClick(e) {
+                console.log(e)
+                let poetryList = this.data.poetrysList
+                let index = e.currentTarget.dataset.index
+                let poetry = JSON.stringify(poetryList[index])
+                console.log(poetry)
+                wx.navigateTo({
+                    url: '../../detail/detail?poetry=' + encodeURIComponent(poetry)
+                })
+            }
+        }
+    })
+</script>
+
+<style scoped>
+  .poetry-class {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    background: #d6cebf;
+    border-radius: 6px;
+    margin: 10px 5%;
+    padding: 20px 0;
+    color: #414444;
+  }
+
+  .poetry-title {
+    font-size: large;
+  }
+
+  .poetry-author {
+    text-align: center;
+    margin: 7px;
+  }
+
+  .poetry-line {
+    text-align: center;
+  }
+</style>
