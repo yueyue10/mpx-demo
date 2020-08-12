@@ -1,0 +1,247 @@
+<template>
+  <view class="container">
+    <view class="chapterName">{{bookInfo.chapterName}}</view>
+    <view wx:for="{{bookInfo.paragraphs}}" wx:key="*this">
+      <text class="paragraphs">{{item}}</text>
+    </view>
+  </view>
+
+  <movable-area class="right-func">
+    <movable-view x="{{chapterFunc.x}}" y="{{chapterFunc.y}}" direction="all">
+      <view class="chapter-func">
+        <button class="chapter-btn" hover-class="chapter-btn_hover" size="mini" bindtap="showChapterMenuClick">目录
+        </button>
+        <button wx:if="{{hasPre}}" class="chapter-btn" hover-class="chapter-btn_hover" size="mini"
+                bindtap="onChapterClick" data-flag="pre">上一章
+        </button>
+        <button wx:if="{{hasNext}}" class="chapter-btn" hover-class="chapter-btn_hover" size="mini"
+                bindtap="onChapterClick" data-flag="next">下一章
+        </button>
+      </view>
+    </movable-view>
+  </movable-area>
+
+  <view class="chapterMenuLayout {{showChapterMenu?'chapterMenu_show':'chapterMenu_hide'}}">
+    <scroll-view class="scroll-chapterMenu" scroll-y="true">
+      <view class="chapterMenu-title">目录</view>
+      <block wx:for="{{chapterMenu}}" wx:key="*this" wx:for-index="idx">
+        <view class="chapter-item" style="{{idx==curIndex?'color:#f1d20b':''}}" bindtap="onChapterItemClick"
+              data-index="{{idx}}">
+          {{item}}
+        </view>
+      </block>
+    </scroll-view>
+    <view class="empty-view" bindtap="onMenuEmptyClick"></view>
+  </view>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+    import { getRequest } from '../../../libs/httputils'
+
+    createPage({
+        data: {
+            bookName: '',
+            bookInfo: {},
+            curIndex: 0,
+            hasPre: false,
+            hasNext: false,
+            chapterMenu: [],
+            chapterFunc: {
+                x: 70,
+                y: 250
+            },
+            showChapterMenu: false
+        },
+        onLoad(options) {
+            console.log(options)
+            options.curIndex = 0
+            options.bookName = '《三国演义》'
+            var curIndex = decodeURIComponent(options.curIndex)
+            var bookName = decodeURIComponent(options.bookName)
+            wx.setNavigationBarTitle({
+                title: bookName
+            })
+            getRequest('poetry/oldbook/chapters', {}).then(res => {
+                console.log('chapters', res)
+                let oldBook = res
+                this.bookName = bookName
+                this.chapterMenu = oldBook.chapters
+                this.getChapterInfo(curIndex)
+            })
+        }, methods: {
+            //获取目录下的内容
+            getChapterInfo(index) {
+                // console.log("getChapterInfo", index, typeof (index))
+                var bookName = this.bookName
+                var chapterMenu = this.chapterMenu
+                var chapter = chapterMenu[index]
+                // console.log(chapter)
+                getRequest('poetry/oldbook/content', {}).then(res => {
+                    console.log('content', res)
+                    this.bookInfo = res
+                    this.curIndex = parseInt(index)
+                })
+                // poetry_db.where({
+                //     bookName: bookName,
+                //     chapterName: chapter
+                // }).get({
+                //     success: (res) => {
+                //         console.log(res)
+                //         var bookInfo = res.data[0]
+                //         var curIndex = parseInt(index)
+                //         //是否有上一页或者下一页
+                //         var hasPre = true
+                //         if (curIndex == 0)
+                //             hasPre = false
+                //         var hasNext = true
+                //         if (curIndex == chapterMenu.length - 1)
+                //             hasNext = false
+                //         this.setData({
+                //             bookInfo: bookInfo,
+                //             curIndex: curIndex,
+                //             hasPre: hasPre,
+                //             hasNext: hasNext
+                //         })
+                //         this.backTop()
+                //     }
+                // })
+            },
+            //上一章或下一章点击监听
+            onChapterClick(e) {
+                // console.log(e)
+                var curIndex = this.curIndex
+                var flag = e.currentTarget.dataset.flag
+                var mIndex = curIndex - 1
+                if (flag == 'next')
+                    mIndex = curIndex + 1
+                this.getChapterInfo(mIndex)
+            },
+            //章节目录按钮点击监听
+            showChapterMenuClick(e) {
+                this.setData({
+                    showChapterMenu: true
+                })
+            },
+            //背景点击监听
+            onMenuEmptyClick() {
+                setTimeout(() => {
+                    this.setData({
+                        showChapterMenu: false
+                    })
+                }, 300)
+            },
+            //章节item点击监听
+            onChapterItemClick(e) {
+                console.log(e)
+                var itemIndex = e.currentTarget.dataset.index
+                this.getChapterInfo(itemIndex)
+                this.onMenuEmptyClick()
+            },
+            // 滚动到顶部
+            backTop() {
+                // 控制滚动
+                wx.pageScrollTo({
+                    scrollTop: 0
+                })
+            }
+        }
+    })
+</script>
+
+<style scoped>
+  text {
+    display: flex;
+    font-family: PingFangSC-Regular;
+    font-weight: 500;
+    line-height: 25px;
+  }
+
+  .container {
+    width: calc(100% - 15px);
+    padding: 15px;
+    background: #d6cebf;
+  }
+
+  .chapterName {
+    text-align: center;
+    font-size: larger;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .paragraphs {
+    margin-bottom: 5px;
+  }
+
+  .right-func {
+    top: 0px;
+    right: 0px;
+    width: 100px;
+    height: 100%;
+    position: fixed;
+  }
+
+  .chapter-func {
+    width: 80px;
+    /* background: blue; */
+  }
+
+  .chapter-btn {
+    color: white;
+    margin: 10px 0px;
+    background: #ad605a;
+  }
+
+  .chapter-btn_hover {
+    background: #c64b42;
+  }
+
+  .chapterMenuLayout {
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    z-index: 10;
+  }
+
+  .chapterMenu_show {
+    /* 动画 */
+    transform: scaleX(1);
+    transition: transform 0.8s;
+    transform-origin: left center;
+  }
+
+  .chapterMenu_hide {
+    /* 动画 */
+    transform: scaleX(0);
+    transition: transform 0.8s;
+    transform-origin: left center;
+  }
+
+  .scroll-chapterMenu {
+    width: 80%;
+    background: #6d6b68;
+  }
+
+  .chapterMenu-title {
+    margin: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .chapter-item {
+    /* color: #ed9f35; */
+    color: #d5a55f;
+    padding: 3px;
+  }
+
+  .empty-view {
+    width: 20%;
+    background: black;
+    opacity: 0.4;
+  }
+</style>

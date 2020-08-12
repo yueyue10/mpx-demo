@@ -1,0 +1,226 @@
+<template>
+  <view class="poetrys-list">
+    <block wx:for="{{poetrys}}" wx:for-item="poetry" wx:for-index="idx" wx:key="*this">
+      <view class="poetry-item" bindtap="onPoetryItemClick" data-index="{{idx}}">
+        <view wx:if="{{isRank}}" class="poetry-index">排名:{{poetry.index}}</view>
+        <view class="poetry-title">{{poetry.title}}</view>
+        <view class="poetry-info">
+          <view>{{poetry.time}}</view>
+          <view>{{poetry.author}}</view>
+        </view>
+        <image wx:if="{{poetry.pic}}" mode="widthFix" class="poetry-image" src="{{poetry.pic}}"></image>
+        <block wx:for="{{poetry.content}}" wx:key="*this">
+          <view class="poetry-content">{{item}}</view>
+        </block>
+      </view>
+    </block>
+  </view>
+
+  <view class="page-index">
+    <block wx:for="{{pages}}" wx:key="*this">
+      <view class="page-index-item {{item==curPage?'page-index-item_cur':''}}"
+            style="{{item=='下一页'?'font-size:15px;':''}}" bindtap="onIndexClick" data-value="{{item}}">{{item}}
+      </view>
+    </block>
+  </view>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+    import { getRequest, postRequest } from '../../../libs/httputils'
+
+    createPage({
+        data: {
+            poetryList: [],
+            poetrys: [],
+            curPage: 1,
+            isRank: true,
+            pages: [1, 2, 3, 4, 5, '下一页']
+        },
+        onLoad(options) {
+            if (options.title != null) {
+                getRequest('poetry/mark/poetryList', {}).then(res => {
+                    console.log('poetryList', res)
+                    let poetrys = res
+                    this.poetrys = poetrys.slice(0, 10)
+                    this.poetryList = poetrys
+                }, err => {
+                    console.error(err)
+                })
+                wx.setNavigationBarTitle({
+                    title: options.title
+                })
+                this.isRank=false
+            } else {
+                getRequest('poetry/rank/poetryList', {}).then(res => {
+                    console.log('poetryList', res)
+                    let poetrys = res
+                    this.poetrys = poetrys.slice(0, 10)
+                    this.poetryList = poetrys
+                }, err => {
+                    console.error(err)
+                })
+            }
+        },
+        methods: {
+            //页面点击监听
+            onIndexClick(e) {
+                console.log(e)
+                var pages = this.pages
+                var curPage = this.curPage
+                var poetryList = this.poetryList
+                var value = e.currentTarget.dataset.value
+                var remainPoes = poetryList.length - 10 * pages[4]
+                // console.log("remainPoes", remainPoes)
+                // 点击的是最有一个页码
+                var clickLastPage = value == pages[4].toString()
+                // 点击"下一页"到最后一个页码
+                var nextToLastPage = value == '下一页' && curPage == pages[3]
+                if (remainPoes < 0 && (clickLastPage || nextToLastPage)) {
+                    wx.showToast({
+                        title: '暂无更多数据'
+                    })
+                    return
+                }
+                curPage = value != '下一页' ? value : curPage + 1
+                if (curPage == pages[4] && curPage < 20) {
+                    var arr = [curPage + 1, curPage + 2]
+                    pages.splice(0, 2)
+                    pages.splice(3, 0, arr[0], arr[1])
+                }
+                if (curPage == pages[0] && curPage > 1) {
+                    var arr = [curPage - 2, curPage - 1]
+                    pages.splice(3, 2)
+                    pages.splice(0, 0, arr[0], arr[1])
+                }
+                var start = (curPage - 1) * 10
+                // console.log(poetryList, start)
+                var poetrys = poetryList.slice(start, start + 10)
+                this.pageScrollToTop()
+                this.setData({
+                    curPage: curPage,
+                    pages: pages,
+                    poetrys: poetrys
+                })
+            },
+            // 使页面滚动到容器顶部
+            pageScrollToTop: function() {
+                wx.createSelectorQuery().select('.poetrys-list').boundingClientRect(function(rect) {
+                    console.log(rect.height)
+                    wx.pageScrollTo({
+                        scrollTop: 0
+                    })
+                }).exec()
+            },
+            //诗词item点击监听
+            onPoetryItemClick(e) {
+                console.log(e)
+                var poetryList = this.poetryList
+                var index = e.currentTarget.dataset.index
+                var poetry = JSON.stringify(poetryList[index])
+                // console.log(poetry)
+                wx.navigateTo({
+                    url: '../detail/detail?poetry=' + encodeURIComponent(poetry)
+                })
+            }
+        }
+    })
+</script>
+<script name="json">
+    module.exports = {
+        navigationBarTitleText: '诗词排行榜'
+    }
+</script>
+
+<style scoped>
+  @import "../../../libs/weui.wxss";
+
+  page {
+    background: #F6F6F6;
+  }
+
+  view {
+    font-size: 15px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+  }
+
+  .poetrys-list {
+    margin-bottom: 45px;
+  }
+
+  .poetry-item {
+    margin: 15px 15px;
+    padding: 10px;
+    border-radius: 5px;
+    background: #d6cebf;
+    box-shadow: 0 0 2px #ccc;
+    text-align: center;
+    position: relative;
+  }
+
+  .poetry-index {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    color: white;
+    padding: 3px 7px;
+    font-size: 13px;
+    background: #697284;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 3px;
+  }
+
+  .poetry-title {
+    font-size: large;
+    font-weight: 800;
+    margin-top: 15px;
+  }
+
+  .poetry-info {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .poetry-image {
+    width: 90%;
+    border-radius: 3px;
+    max-height: 200px;
+  }
+
+  .poetry-content {
+    line-height: 50px;
+  }
+
+  .page-index {
+    background: white;
+    position: fixed;
+    bottom: 0px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 40px;
+    justify-content: center;
+    box-shadow: 0 0 1px #ccc;
+  }
+
+  .page-index-item {
+    font-size: 15px;
+    font-weight: 700;
+    height: 100%;
+    width: 50px;
+    line-height: 40px;
+    color: #C39966;
+  }
+
+  .page-index-item_cur {
+    background: #F5EEE5;
+  }
+
+  .hover_page-index-item {
+    background: #F5EEE5;
+  }
+</style>

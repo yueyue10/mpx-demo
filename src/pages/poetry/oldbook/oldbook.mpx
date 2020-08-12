@@ -1,0 +1,88 @@
+<template>
+  <view class="hecheng-view">
+    <view class="hecheng-item" wx:for="{{oldbooks}}" wx:key="*this">
+      <view class="item-title">
+        {{item.name}}
+        <label wx:if="{{item.name=='四大名著'}}" class="book-hint">*点击书籍可以阅读*</label>
+      </view>
+      <view class="item-des">{{item.desc}}
+      </view>
+      <view class="content-text">
+        <block wx:for="{{item.books}}" wx:key="*this" wx:for-item="book">
+          <label class="{{item.name=='四大名著'?'content-books_a':''}}" bindtap="{{item.name=='四大名著'?'onBookClick':''}}"
+                 data-name="{{book}}">{{book}}</label>
+        </block>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+    import { getRequest } from '../../../libs/httputils'
+
+    createPage({
+        data: { oldbooks: [] },
+        onLoad(query) {
+            getRequest('poetry/oldbook/infos', {}).then(res => {
+                this.oldbooks = res
+            })
+        }, methods: {
+            //书籍点击监听
+            onBookClick(e) {
+                console.log(e)
+                var bookName = e.currentTarget.dataset.name
+                console.log(bookName)
+                wx.navigateTo({
+                    url: 'chapter?bookName=' + bookName
+                })
+            }
+        }
+    })
+</script>
+<script name="json">
+    module.exports = {
+        navigationBarTitleText: '史书典籍'
+    }
+</script>
+
+<style scoped>
+  @import "../../../libs/weui.wxss";
+
+  .hecheng-item {
+    margin: 10px;
+    border: 1px;
+    border-radius: 2px;
+    background: #d6cebf;
+    padding: 7px;
+  }
+
+  .item-title {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .book-hint {
+    font-size: 13px;
+    color: #acb3b4;
+    margin: 5px;
+  }
+
+  .item-des {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 7px;
+  }
+
+  .content-text {
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: normal;
+    color: black;
+    font-size: 15px;
+  }
+
+  .content-books_a {
+    color: #C39966;
+  }
+</style>

@@ -76,7 +76,11 @@
         }
     })
 </script>
-
+<script name="json">
+    module.exports = {
+        navigationBarTitleText: '课本古诗'
+    }
+</script>
 <style scoped>
   @import "../../../libs/weui.wxss";
 

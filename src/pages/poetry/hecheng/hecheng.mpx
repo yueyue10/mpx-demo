@@ -1,0 +1,59 @@
+<template>
+  <view class="hecheng-view">
+    <view class="hecheng-item" wx:for="{{hechengs}}" wx:key="*this">
+      <view class="item-title">{{item.name}}</view>
+
+      <view class="content-text">
+        <block wx:for="{{item.content}}" wx:key="*this">
+          <label class="content-main">{{item.des_a}}</label>{{item.des_text}}
+        </block>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+    import { getRequest } from '../../../libs/httputils'
+
+    createPage({
+        data: { hechengs: [] },
+        onLoad(options) {
+            getRequest('poetry/hecheng/infos', {}).then(res => {
+                console.log('hechengs', res)
+                this.hechengs = res
+            })
+        }
+    })
+</script>
+<script name="json">
+    module.exports = {
+        navigationBarTitleText: '作者合称'
+    }
+</script>
+
+<style scoped>
+  .hecheng-item {
+    margin: 10px;
+    border: 1px;
+    border-radius: 2px;
+    background: #efca84;
+    padding: 7px;
+  }
+
+  .item-title {
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  .content-text {
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: normal;
+    color: #666666;
+  }
+
+  .content-main {
+    color: #b7706a;
+  }
+</style>

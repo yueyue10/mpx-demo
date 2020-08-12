@@ -1,0 +1,111 @@
+<template>
+  <view class="container">
+    <view class="book-info-layout">
+      <image class="book-image" src="{{oldBook.image}}"></image>
+      <view class="book-info">
+        <view class="book-name">{{oldBook.bookName}}</view>
+        <view class="book-info_content">{{oldBook.year}}</view>
+        <view class="book-info_content">{{oldBook.author}}</view>
+      </view>
+    </view>
+    <view class="book-desc">{{oldBook.desc}}</view>
+    <view class="divider-line"></view>
+    <view wx:for="{{oldBook.chapters}}" wx:key="*this" wx:for-index="idx">
+      <view class="book-chapters" bindtap="onChapterClick" data-index="{{idx}}">{{item}}</view>
+    </view>
+  </view>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+    import { getRequest } from '../../../libs/httputils'
+
+    createPage({
+        data: { oldBook: {} },
+        onLoad(options) {
+            wx.setNavigationBarTitle({
+                title: options.bookName
+            })
+            getRequest('poetry/oldbook/chapters', {}).then(res => {
+                this.oldBook = res
+            })
+        }, methods: {
+            //章节点击监听
+            onChapterClick(e) {
+                console.log(e)
+                var bookName = this.oldBook.bookName
+                var index = e.currentTarget.dataset.index
+                wx.navigateTo({
+                    url: 'detail?bookName=' + bookName + '&curIndex=' + index
+                })
+            }
+        }
+    })
+</script>
+<script name="json">
+    module.exports = {
+        navigationBarTitleText: '史书典籍'
+    }
+</script>
+
+<style scoped>
+  view {
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+  }
+
+  text {
+    display: flex;
+    font-family: PingFangSC-Regular;
+    font-weight: 500;
+  }
+
+  .container {
+    width: calc(100% - 15px);
+    margin: 15px;
+  }
+
+  .book-name {
+    font-size: x-large;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .book-info-layout {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .book-image {
+    width: 100px;
+    height: 142px;
+  }
+
+  .book-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .book-info_content {
+    margin-left: 15px;
+  }
+
+  .book-desc {
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
+    margin-right: 20px;
+  }
+
+  .divider-line {
+    margin: 10px 0px;
+    width: 100%;
+    height: 1px;
+    background: #999;
+  }
+
+  .book-chapters {
+    padding: 5px;
+  }
+</style>

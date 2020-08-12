@@ -22,7 +22,7 @@
 
 <script>
     import { createPage } from '@mpxjs/core'
-    import todoStore from '../store/todo'
+    import todoStore from '../../store/todo'
 
     const filter = {
         all: todos => todos,

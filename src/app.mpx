@@ -89,7 +89,13 @@
             './pages/poetry/poetry',
             './pages/poetry/grade/grade',
             './pages/poetry/grade/gradeDetail',
-            './pages/index'
+            './pages/poetry/rank/rank',
+            './pages/poetry/mark/list',
+            './pages/poetry/hecheng/hecheng',
+            './pages/poetry/oldbook/oldbook',
+            './pages/poetry/oldbook/chapter',
+            './pages/poetry/oldbook/detail',
+            './pages/todo/index'
         ]
     }
 </script>

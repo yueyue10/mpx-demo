@@ -19,14 +19,14 @@
             grids: [{
                 title: '课本古诗',
                 url: 'grade/grade',
-                image: "../../images/ic_bookmark.png"
+                image: '../../images/ic_bookmark.png'
             }, {
                 title: '排行榜',
                 url: 'rank/rank',
                 image: '../../images/ic_grade.jpg'
             }, {
                 title: '诗词分类',
-                url: 'mark/mark',
+                url: 'mark/list',
                 image: '../../images/ic_grade.jpg'
             }, {
                 title: '作者合称',
@@ -39,6 +39,11 @@
             }]
         }
     })
+</script>
+<script name="json">
+    module.exports = {
+        navigationBarTitleText: '诗词古文'
+    }
 </script>
 
 <style scoped>
