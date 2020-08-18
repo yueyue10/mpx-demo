@@ -2,7 +2,7 @@
   <view class="poetrys-list">
     <block wx:for="{{poetrys}}" wx:for-item="poetry" wx:for-index="idx" wx:key="*this">
       <view class="poetry-item" bindtap="onPoetryItemClick" data-index="{{idx}}">
-        <view wx:if="{{isRank}}" class="poetry-index">排名:{{poetry.index}}</view>
+        <view wx:if="{{isRank}}" class="poetry-index">排名:{{poetry.mark_index}}</view>
         <view class="poetry-title">{{poetry.title}}</view>
         <view class="poetry-info">
           <view>{{poetry.time}}</view>
@@ -31,46 +31,62 @@
 
     createPage({
         data: {
-            poetryList: [],
+            poetrySize: 0,
             poetrys: [],
             curPage: 1,
             isRank: true,
+            poetryFlag: '',
             pages: [1, 2, 3, 4, 5, '下一页']
         },
         onLoad(options) {
             if (options.title != null) {
-                getRequest('poetry/mark/poetryList', {}).then(res => {
-                    console.log('poetryList', res)
-                    let poetrys = res
-                    this.poetrys = poetrys.slice(0, 10)
-                    this.poetryList = poetrys
-                }, err => {
-                    console.error(err)
-                })
                 wx.setNavigationBarTitle({
                     title: options.title
                 })
-                this.isRank=false
+                this.isRank = false
+                this.poetryFlag = options.flag
+                this.getMarkPoetryList(0, 10)
             } else {
-                getRequest('poetry/rank/poetryList', {}).then(res => {
-                    console.log('poetryList', res)
-                    let poetrys = res
-                    this.poetrys = poetrys.slice(0, 10)
-                    this.poetryList = poetrys
-                }, err => {
-                    console.error(err)
-                })
+                this.getRankPoetryList(0, 10)
             }
         },
         methods: {
+            getMarkPoetryList(offset, limit) {
+                let poetryFlag = this.poetryFlag
+                getRequest('/poetry/list/byFlag', { poetryFlag, offset, limit }).then(res => {
+                    console.log('poetryList', res)
+                    let poetrys = res.results
+                    poetrys.forEach(poetry => {
+                        poetry.content = JSON.parse(poetry.content)
+                    })
+                    this.poetrys = poetrys
+                    this.poetrySize = res.count
+                }, err => {
+                    console.error(err)
+                })
+            },
+            getRankPoetryList(offset, limit) {
+                getRequest('/poetry/rank/poetry', { offset, limit }).then(res => {
+                    console.log('poetryList', res)
+                    let poetrys = res.results
+                    poetrys.forEach(poetry => {
+                        poetry.content = JSON.parse(poetry.content)
+                        console.log(poetry.mark_index, poetry.content)
+                    })
+                    this.poetrys = poetrys
+                    this.poetrySize = res.count
+                }, err => {
+                    console.error(err)
+                })
+            },
             //页面点击监听
             onIndexClick(e) {
                 console.log(e)
                 var pages = this.pages
                 var curPage = this.curPage
-                var poetryList = this.poetryList
+                var poetrySize = this.poetrySize
                 var value = e.currentTarget.dataset.value
-                var remainPoes = poetryList.length - 10 * pages[4]
+                var remainPoes = poetrySize - 10 * pages[4]
                 // console.log("remainPoes", remainPoes)
                 // 点击的是最有一个页码
                 var clickLastPage = value == pages[4].toString()
@@ -93,15 +109,17 @@
                     pages.splice(3, 2)
                     pages.splice(0, 0, arr[0], arr[1])
                 }
-                var start = (curPage - 1) * 10
-                // console.log(poetryList, start)
-                var poetrys = poetryList.slice(start, start + 10)
                 this.pageScrollToTop()
                 this.setData({
                     curPage: curPage,
-                    pages: pages,
-                    poetrys: poetrys
+                    pages: pages
                 })
+                let offset = (curPage - 1) * 10
+                if (this.isRank) {
+                    this.getRankPoetryList(offset, 10)
+                } else {
+                    this.getMarkPoetryList(offset, 10)
+                }
             },
             // 使页面滚动到容器顶部
             pageScrollToTop: function() {

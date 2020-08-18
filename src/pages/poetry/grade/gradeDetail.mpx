@@ -1,5 +1,5 @@
 <template>
-  <block wx:for="{{poetrysList}}" wx:key="*this" wx:for-item="poetry" wx:for-index="idx">
+  <block wx:for="{{poetryList}}" wx:key="*this" wx:for-item="poetry" wx:for-index="idx">
     <view class="poetry-class" bindtap="onPoetryItemClick" data-index="{{idx}}">
       <text class="poetry-line text-font poetry-title">{{poetry.title}}</text>
       <view class="poetry-author">
@@ -32,31 +32,40 @@
                     '白毛浮绿水，红掌拨清波。'
                 ]
             },
-            poetrysList: []
+            poetryList: []
+        },
+        onLoad(options) {
+            // console.log(options)
+            let title = decodeURIComponent(options.title)
+            let flag = decodeURIComponent(options.flag)
+            wx.setNavigationBarTitle({
+                title: title
+            })
+            this.getGradePoetry(flag)
         },
         methods: {
-            onLoad(options) {
-                // console.log(options)
-                let title = decodeURIComponent(options.title)
-                wx.setNavigationBarTitle({
-                    title: title
-                })
-                getRequest('poetry/grade/poetryList', {}).then(res => {
-                    console.log("poetryList",res)
-                    this.poetrysList=res
-                }, err => {
-                    console.error(err)
-                })
-            },
             //诗词列表点击监听
             onPoetryItemClick(e) {
                 console.log(e)
-                let poetryList = this.data.poetrysList
+                let poetryList = this.data.poetryList
                 let index = e.currentTarget.dataset.index
                 let poetry = JSON.stringify(poetryList[index])
                 console.log(poetry)
                 wx.navigateTo({
                     url: '../../detail/detail?poetry=' + encodeURIComponent(poetry)
+                })
+            },
+            getGradePoetry(poetryFlag) {
+                getRequest('/poetry/list/byFlag', { poetryFlag }).then(res => {
+                    // console.log('poetryList', res)
+                    let poetryList = res.results
+                    console.log('poetryList', poetryList)
+                    poetryList.forEach(poetry => {
+                        poetry.content = JSON.parse(poetry.content)
+                    })
+                    this.poetryList = poetryList
+                }, err => {
+                    console.error(err)
                 })
             }
         }

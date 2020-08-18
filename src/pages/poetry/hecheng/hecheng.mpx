@@ -1,10 +1,9 @@
 <template>
   <view class="hecheng-view">
     <view class="hecheng-item" wx:for="{{hechengs}}" wx:key="*this">
-      <view class="item-title">{{item.name}}</view>
-
+      <view class="item-title">{{item.title}}</view>
       <view class="content-text">
-        <block wx:for="{{item.content}}" wx:key="*this">
+        <block wx:for="{{item.data}}" wx:key="*this">
           <label class="content-main">{{item.des_a}}</label>{{item.des_text}}
         </block>
       </view>
@@ -19,10 +18,20 @@
     createPage({
         data: { hechengs: [] },
         onLoad(options) {
-            getRequest('poetry/hecheng/infos', {}).then(res => {
-                console.log('hechengs', res)
-                this.hechengs = res
-            })
+            this.getMergeList()
+        },
+        methods: {
+            getMergeList() {
+                let merge_flag = '作者合称大全'
+                getRequest('/poetry/merge/info', { merge_flag }).then(res => {
+                    console.log('hechengs', res)
+                    let hechengs = res
+                    hechengs.forEach(hecheng => {
+                        hecheng.data = JSON.parse(hecheng.data)
+                    })
+                    this.hechengs = hechengs
+                })
+            }
         }
     })
 </script>

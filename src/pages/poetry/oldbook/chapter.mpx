@@ -26,15 +26,23 @@
             wx.setNavigationBarTitle({
                 title: options.bookName
             })
-            getRequest('poetry/oldbook/chapters', {}).then(res => {
-                this.oldBook = res
-            })
+            this.getBookInfo(options.bookName)
         }, methods: {
+            getBookInfo(bookName) {
+                getRequest('/poetry/book/info', { bookName }).then(res => {
+                    let oldBooks = res
+                    oldBooks.forEach(oldBook => {
+                        console.log(oldBook.chapters)
+                        oldBook.chapters = JSON.parse(oldBook.chapters)
+                    })
+                    this.oldBook = oldBooks[0]
+                })
+            },
             //章节点击监听
             onChapterClick(e) {
                 console.log(e)
-                var bookName = this.oldBook.bookName
-                var index = e.currentTarget.dataset.index
+                let bookName = this.oldBook.bookName
+                let index = e.currentTarget.dataset.index
                 wx.navigateTo({
                     url: 'detail?bookName=' + bookName + '&curIndex=' + index
                 })

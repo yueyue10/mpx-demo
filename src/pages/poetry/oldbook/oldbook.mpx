@@ -2,14 +2,14 @@
   <view class="hecheng-view">
     <view class="hecheng-item" wx:for="{{oldbooks}}" wx:key="*this">
       <view class="item-title">
-        {{item.name}}
-        <label wx:if="{{item.name=='四大名著'}}" class="book-hint">*点击书籍可以阅读*</label>
+        {{item.title}}
+        <label wx:if="{{item.title=='四大名著'}}" class="book-hint">*点击书籍可以阅读*</label>
       </view>
       <view class="item-des">{{item.desc}}
       </view>
       <view class="content-text">
-        <block wx:for="{{item.books}}" wx:key="*this" wx:for-item="book">
-          <label class="{{item.name=='四大名著'?'content-books_a':''}}" bindtap="{{item.name=='四大名著'?'onBookClick':''}}"
+        <block wx:for="{{item.data}}" wx:key="*this" wx:for-item="book">
+          <label class="{{item.title=='四大名著'?'content-books_a':''}}" bindtap="{{item.title=='四大名著'?'onBookClick':''}}"
                  data-name="{{book}}">{{book}}</label>
         </block>
       </view>
@@ -24,10 +24,19 @@
     createPage({
         data: { oldbooks: [] },
         onLoad(query) {
-            getRequest('poetry/oldbook/infos', {}).then(res => {
-                this.oldbooks = res
-            })
+            this.getBookList()
         }, methods: {
+            getBookList() {
+                let merge_flag = '史书典籍'
+                getRequest('/poetry/merge/info', { merge_flag }).then(res => {
+                    console.log('hechengs', res)
+                    let oldbooks = res
+                    oldbooks.forEach(hecheng => {
+                        hecheng.data = JSON.parse(hecheng.data)
+                    })
+                    this.oldbooks = oldbooks
+                })
+            },
             //书籍点击监听
             onBookClick(e) {
                 console.log(e)

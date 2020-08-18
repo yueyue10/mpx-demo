@@ -54,32 +54,46 @@
             showChapterMenu: false
         },
         onLoad(options) {
-            console.log(options)
-            options.curIndex = 0
-            options.bookName = '《三国演义》'
-            var curIndex = decodeURIComponent(options.curIndex)
-            var bookName = decodeURIComponent(options.bookName)
+            // console.log(options)
+            let curIndex = decodeURIComponent(options.curIndex)
+            let bookName = decodeURIComponent(options.bookName)
             wx.setNavigationBarTitle({
                 title: bookName
             })
-            getRequest('poetry/oldbook/chapters', {}).then(res => {
-                console.log('chapters', res)
-                let oldBook = res
-                this.bookName = bookName
-                this.chapterMenu = oldBook.chapters
-                this.getChapterInfo(curIndex)
-            })
+            this.bookName = bookName
+            this.getBookInfo(bookName, curIndex)
         }, methods: {
+            getBookInfo(bookName, curIndex) {
+                getRequest('/poetry/book/info', { bookName }).then(res => {
+                    let oldBooks = res
+                    oldBooks.forEach(oldBook => {
+                        // console.log(oldBook.chapters)
+                        oldBook.chapters = JSON.parse(oldBook.chapters)
+                    })
+                    let oldBook = oldBooks[0]
+                    console.log('oldBook', oldBook)
+                    this.bookName = oldBook.bookName
+                    this.chapterMenu = oldBook.chapters
+                    this.getChapterInfo(curIndex)
+                })
+            },
             //获取目录下的内容
             getChapterInfo(index) {
                 // console.log("getChapterInfo", index, typeof (index))
-                var bookName = this.bookName
-                var chapterMenu = this.chapterMenu
-                var chapter = chapterMenu[index]
-                // console.log(chapter)
-                getRequest('poetry/oldbook/content', {}).then(res => {
-                    console.log('content', res)
-                    this.bookInfo = res
+                let bookName = this.bookName
+                let chapterMenu = this.chapterMenu
+                let chapter = chapterMenu[index]
+                chapter = chapter.replace(/\s+/g, '')
+                // console.log(bookName, chapter)
+                getRequest('/poetry/book/chapter', { bookName, chapter }).then(res => {
+                    // console.log('content', res)
+                    let bookInfos = res
+                    bookInfos.forEach(bookInfo => {
+                        console.log(bookInfo.paragraphs)
+                        bookInfo.paragraphs = JSON.parse(bookInfo.paragraphs)
+                        console.log(bookInfo.paragraphs)
+                    })
+                    this.bookInfo = bookInfos[0]
                     this.curIndex = parseInt(index)
                 })
                 // poetry_db.where({

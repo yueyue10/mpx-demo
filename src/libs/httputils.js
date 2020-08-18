@@ -5,7 +5,7 @@ let header = {
   'Content-Type': 'application/json',
   device_token: 'ebc9f523e570ef14'
 }
-let baseUrl = 'http://81.68.145.189:3000'
+let baseUrl = 'https://zhaoyj.work'
 
 export function postRequest(url, params) {
   // console.log('请求方式：', 'POST')
