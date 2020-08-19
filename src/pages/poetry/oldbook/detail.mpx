@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <view class="chapterName">{{bookInfo.chapterName}}</view>
+    <view class="chapterName">{{bookInfo.title}}</view>
     <view wx:for="{{bookInfo.paragraphs}}" wx:key="*this">
       <text class="paragraphs">{{item}}</text>
     </view>
@@ -71,65 +71,53 @@
                         oldBook.chapters = JSON.parse(oldBook.chapters)
                     })
                     let oldBook = oldBooks[0]
-                    console.log('oldBook', oldBook)
+                    // console.log('oldBook', oldBook)
                     this.bookName = oldBook.bookName
                     this.chapterMenu = oldBook.chapters
-                    this.getChapterInfo(curIndex)
+                    this.getChapterParagraph(curIndex)
                 })
             },
             //获取目录下的内容
-            getChapterInfo(index) {
-                // console.log("getChapterInfo", index, typeof (index))
+            getChapterParagraph(index) {
                 let bookName = this.bookName
                 let chapterMenu = this.chapterMenu
                 let chapter = chapterMenu[index]
-                chapter = chapter.replace(/\s+/g, '')
-                // console.log(bookName, chapter)
                 getRequest('/poetry/book/chapter', { bookName, chapter }).then(res => {
                     // console.log('content', res)
                     let bookInfos = res
                     bookInfos.forEach(bookInfo => {
-                        console.log(bookInfo.paragraphs)
+                        // console.log(bookInfo.paragraphs)
                         bookInfo.paragraphs = JSON.parse(bookInfo.paragraphs)
-                        console.log(bookInfo.paragraphs)
+                        // console.log(bookInfo.paragraphs)
                     })
                     this.bookInfo = bookInfos[0]
                     this.curIndex = parseInt(index)
+                    this.getPageData()
                 })
-                // poetry_db.where({
-                //     bookName: bookName,
-                //     chapterName: chapter
-                // }).get({
-                //     success: (res) => {
-                //         console.log(res)
-                //         var bookInfo = res.data[0]
-                //         var curIndex = parseInt(index)
-                //         //是否有上一页或者下一页
-                //         var hasPre = true
-                //         if (curIndex == 0)
-                //             hasPre = false
-                //         var hasNext = true
-                //         if (curIndex == chapterMenu.length - 1)
-                //             hasNext = false
-                //         this.setData({
-                //             bookInfo: bookInfo,
-                //             curIndex: curIndex,
-                //             hasPre: hasPre,
-                //             hasNext: hasNext
-                //         })
-                //         this.backTop()
-                //     }
-                // })
+            },
+            getPageData() {
+                let curIndex = this.curIndex
+                let chapterMenu = this.chapterMenu
+                //是否有上一页或者下一页
+                let hasPre = true
+                if (curIndex == 0)
+                    hasPre = false
+                let hasNext = true
+                if (curIndex == chapterMenu.length - 1)
+                    hasNext = false
+                this.hasPre = hasPre
+                this.hasNext = hasNext
+                this.backTop()
             },
             //上一章或下一章点击监听
             onChapterClick(e) {
                 // console.log(e)
-                var curIndex = this.curIndex
-                var flag = e.currentTarget.dataset.flag
-                var mIndex = curIndex - 1
+                let curIndex = this.curIndex
+                let flag = e.currentTarget.dataset.flag
+                let mIndex = curIndex - 1
                 if (flag == 'next')
                     mIndex = curIndex + 1
-                this.getChapterInfo(mIndex)
+                this.getChapterParagraph(mIndex)
             },
             //章节目录按钮点击监听
             showChapterMenuClick(e) {
@@ -148,8 +136,8 @@
             //章节item点击监听
             onChapterItemClick(e) {
                 console.log(e)
-                var itemIndex = e.currentTarget.dataset.index
-                this.getChapterInfo(itemIndex)
+                let itemIndex = e.currentTarget.dataset.index
+                this.getChapterParagraph(itemIndex)
                 this.onMenuEmptyClick()
             },
             // 滚动到顶部
