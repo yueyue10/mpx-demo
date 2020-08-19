@@ -52,7 +52,7 @@
                 let poetry = JSON.stringify(poetryList[index])
                 console.log(poetry)
                 wx.navigateTo({
-                    url: '../../detail/detail?poetry=' + encodeURIComponent(poetry)
+                    url: '../detail/detail?poetry=' + encodeURIComponent(poetry)
                 })
             },
             getGradePoetry(poetryFlag) {
@@ -85,15 +85,18 @@
   }
 
   .poetry-title {
-    font-size: large;
+    font-size: 20px;
+    font-weight: 600;
   }
 
   .poetry-author {
     text-align: center;
-    margin: 7px;
+    margin: 5px;
   }
 
   .poetry-line {
     text-align: center;
+    line-height: 25px;
   }
+
 </style>

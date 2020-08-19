@@ -1,0 +1,132 @@
+<template>
+  <view class="container">
+    <view class="poetry-item poetry_bg">
+      <view class="poetry-title">{{poetry.title}}</view>
+      <view class="poetry-info">
+        <view>{{poetry.time}}</view>
+        <view>{{poetry.author}}</view>
+      </view>
+      <image wx:if="{{poetry.pic}}" mode="widthFix" class="poetry-image" src="{{poetry.pic}}"></image>
+      <block wx:for="{{poetry.content}}" wx:key="*this">
+        <view class="poetry-content">{{item}}</view>
+      </block>
+    </view>
+  </view>
+</template>
+
+<script>
+    import { createPage } from '@mpxjs/core'
+
+    createPage({
+        data: {
+            poetry: {}
+        },
+        onLoad(options) {
+            let poetryStr = decodeURIComponent(options.poetry)
+            let poetryObj = JSON.parse(poetryStr)
+            console.log(poetryObj)
+            this.poetry = poetryObj
+        },
+        methods: {}
+    })
+</script>
+
+<script name="json">
+    module.exports = {
+        navigationBarTitleText: '诗词详情'
+    }
+</script>
+
+<style scoped>
+  #app {
+    width: 100%;
+    height: 100%;
+    background: #d6cebf;
+  }
+
+  view {
+    font-size: 17px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+  }
+
+  .poetrys-list {
+    margin-bottom: 45px;
+  }
+
+  .poetry-item {
+    margin: 15px 15px;
+    padding: 10px;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 2px #ccc;
+    text-align: center;
+    position: relative;
+  }
+
+  .poetry-index {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    color: white;
+    padding: 3px 7px;
+    font-size: 13px;
+    background: #697284;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 3px;
+  }
+
+  .poetry-title {
+    font-size: 20px;
+    font-weight: 800;
+    margin-top: 15px;
+  }
+
+  .poetry-info {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .poetry-image {
+    width: 90%;
+    border-radius: 3px;
+    max-height: 200px;
+  }
+
+  .page-index {
+    background: white;
+    position: fixed;
+    bottom: 0px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 40px;
+    justify-content: center;
+    box-shadow: 0 0 1px #ccc;
+  }
+
+  .page-index-item {
+    font-size: 30px;
+    font-weight: 700;
+    height: 100%;
+    width: 50px;
+    line-height: 40px;
+    color: #C39966;
+  }
+
+  .page-index-item_cur {
+    background: #F5EEE5;
+  }
+
+  .hover_page-index-item {
+    background: #F5EEE5;
+  }
+
+  .poetry-content {
+    line-height: 28px;
+  }
+</style>

@@ -1,14 +1,16 @@
 <template>
-  <block wx:for="{{grids}}" wx:key="*this" wx:for-index="idx">
-    <view bindtap="onItemClick" data-url="{{item.url}}">
-      <navigator url="{{item.url}}" class="weui-grid grid-item">
-        <view class="poetry-item">
-          <image class="poetry-banner" src="{{item.image}}"/>
-          <view class="weui-grid__label grid-item_label">{{item.title}}</view>
-        </view>
-      </navigator>
-    </view>
-  </block>
+  <view hidden="{{loading}}" class="weui-grids poetry-grid">
+    <block wx:for="{{grids}}" wx:key="*this" wx:for-index="idx">
+      <view bindtap="onItemClick" data-url="{{item.url}}">
+        <navigator url="{{item.url}}" class="weui-grid grid-item">
+          <view class="poetry-item">
+            <image class="poetry-banner" src="{{item.image}}"/>
+            <view class="weui-grid__label grid-item_label">{{item.title}}</view>
+          </view>
+        </navigator>
+      </view>
+    </block>
+  </view>
 </template>
 
 <script>
@@ -86,7 +88,7 @@
     top: 40%;
     left: 40%;
     color: #29374c;
-    font-size: large;
+    font-size: 20px;
     font-weight: 700;
   }
 </style>

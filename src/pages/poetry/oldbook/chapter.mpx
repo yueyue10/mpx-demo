@@ -27,7 +27,11 @@
                 title: options.bookName
             })
             this.getBookInfo(options.bookName)
-        }, methods: {
+        },
+        onShareAppMessage() {
+
+        },
+        methods: {
             getBookInfo(bookName) {
                 getRequest('/poetry/book/info', { bookName }).then(res => {
                     let oldBooks = res

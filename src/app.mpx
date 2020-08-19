@@ -87,6 +87,7 @@
     module.exports = {
         pages: [
             './pages/poetry/poetry',
+            './pages/poetry/detail/detail',
             './pages/poetry/grade/grade',
             './pages/poetry/grade/gradeDetail',
             './pages/poetry/rank/rank',

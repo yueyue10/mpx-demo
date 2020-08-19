@@ -6,20 +6,16 @@
     </view>
   </view>
 
-  <movable-area class="right-func">
-    <movable-view x="{{chapterFunc.x}}" y="{{chapterFunc.y}}" direction="all">
-      <view class="chapter-func">
-        <button class="chapter-btn" hover-class="chapter-btn_hover" size="mini" bindtap="showChapterMenuClick">目录
-        </button>
-        <button wx:if="{{hasPre}}" class="chapter-btn" hover-class="chapter-btn_hover" size="mini"
-                bindtap="onChapterClick" data-flag="pre">上一章
-        </button>
-        <button wx:if="{{hasNext}}" class="chapter-btn" hover-class="chapter-btn_hover" size="mini"
-                bindtap="onChapterClick" data-flag="next">下一章
-        </button>
-      </view>
-    </movable-view>
-  </movable-area>
+  <view class="chapter-func">
+    <button class="chapter-btn" hover-class="chapter-btn_hover" size="mini" bindtap="showChapterMenuClick">目录
+    </button>
+    <button wx:if="{{hasPre}}" class="chapter-btn" hover-class="chapter-btn_hover" size="mini"
+            bindtap="onChapterClick" data-flag="pre">上一章
+    </button>
+    <button wx:if="{{hasNext}}" class="chapter-btn" hover-class="chapter-btn_hover" size="mini"
+            bindtap="onChapterClick" data-flag="next">下一章
+    </button>
+  </view>
 
   <view class="chapterMenuLayout {{showChapterMenu?'chapterMenu_show':'chapterMenu_hide'}}">
     <scroll-view class="scroll-chapterMenu" scroll-y="true">
@@ -47,10 +43,6 @@
             hasPre: false,
             hasNext: false,
             chapterMenu: [],
-            chapterFunc: {
-                x: 70,
-                y: 250
-            },
             showChapterMenu: false
         },
         onLoad(options) {
@@ -62,7 +54,14 @@
             })
             this.bookName = bookName
             this.getBookInfo(bookName, curIndex)
-        }, methods: {
+        },
+        onShareAppMessage() {
+
+        },
+        showShareMenu(){
+
+        },
+        methods: {
             getBookInfo(bookName, curIndex) {
                 getRequest('/poetry/book/info', { bookName }).then(res => {
                     let oldBooks = res
@@ -176,22 +175,18 @@
     margin-bottom: 5px;
   }
 
-  .right-func {
-    top: 0px;
-    right: 0px;
-    width: 100px;
-    height: 100%;
-    position: fixed;
-  }
 
   .chapter-func {
     width: 80px;
+    position: fixed;
+    right: -20px;
+    top: 40%;
     /* background: blue; */
   }
 
   .chapter-btn {
     color: white;
-    margin: 10px 0px;
+    margin: 4px 0px;
     background: #ad605a;
   }
 
