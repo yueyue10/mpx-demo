@@ -208,10 +208,6 @@
     max-height: 200px;
   }
 
-  .poetry-content {
-    line-height: 50px;
-  }
-
   .page-index {
     background: white;
     position: fixed;

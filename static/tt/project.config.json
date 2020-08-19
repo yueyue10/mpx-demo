@@ -1,0 +1,11 @@
+{
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true
+  },
+  "appid": "tt980feeb20735fd9c",
+  "projectname": "个人超级工具箱"
+}
