@@ -22,6 +22,16 @@
         onLoad() {
             this.getGradeList()
         },
+        onShareAppMessage(shareOption) {
+            return {
+                title: '课本古诗',
+                imageUrl: 'https://zhaoyj.work/image/ic_poetry_grade.png',
+                extra: {
+                    videoTopics: ['诗词古文'], // 只有抖音支持该属性
+                    videoPath: ''
+                }
+            }
+        },
         methods: {
             //item点击事件
             onItemClick(e) {

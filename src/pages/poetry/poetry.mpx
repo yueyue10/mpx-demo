@@ -20,7 +20,7 @@
 
     createPage({
         data: {
-            ic_bookmark:'',
+            ic_bookmark: '',
             grids: [{
                 title: '课本古诗',
                 url: 'grade/grade',
@@ -47,6 +47,16 @@
             image_path() {
                 // return require('../../images/' + image_name + '.jpg')
                 return require('../../image/ic_bookmark.jpg')
+            }
+        },
+        onShareAppMessage(shareOption) {
+            return {
+                title: '来《个人超级工具箱》查看更多功能',
+                imageUrl: 'https://zhaoyj.work/image/ic_poetry_grade.png',
+                extra: {
+                    videoTopics: ['诗词古文'], // 只有抖音支持该属性
+                    videoPath: ''
+                }
             }
         }
     })

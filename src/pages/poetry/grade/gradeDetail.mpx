@@ -43,6 +43,16 @@
             })
             this.getGradePoetry(flag)
         },
+        onShareAppMessage(shareOption) {
+            return {
+                title: '课本古诗',
+                imageUrl: 'https://zhaoyj.work/image/ic_poetry_grade.png',
+                extra: {
+                    videoTopics: ['诗词古文'], // 只有抖音支持该属性
+                    videoPath: ''
+                }
+            }
+        },
         methods: {
             //诗词列表点击监听
             onPoetryItemClick(e) {

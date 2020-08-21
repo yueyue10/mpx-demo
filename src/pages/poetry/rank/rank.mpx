@@ -50,6 +50,16 @@
                 this.getRankPoetryList(0, 10)
             }
         },
+        onShareAppMessage(shareOption) {
+            return {
+                title: '诗词排行榜',
+                imageUrl: 'https://zhaoyj.work/image/ic_poetry_grade.png',
+                extra: {
+                    videoTopics: ['诗词古文'], // 只有抖音支持该属性
+                    videoPath: ''
+                }
+            }
+        },
         methods: {
             getMarkPoetryList(offset, limit) {
                 let poetryFlag = this.poetryFlag

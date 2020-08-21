@@ -27,6 +27,8 @@
             console.log(poetryObj)
             this.poetry = poetryObj
         },
+        onShareAppMessage(shareOption) {
+        },
         methods: {}
     })
 </script>

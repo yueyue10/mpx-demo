@@ -25,7 +25,18 @@
         data: { oldbooks: [] },
         onLoad(query) {
             this.getBookList()
-        }, methods: {
+        },
+        onShareAppMessage(shareOption) {
+            return {
+                title: '史书典籍',
+                imageUrl: 'https://zhaoyj.work/image/ic_poetry_grade.png',
+                extra: {
+                    videoTopics: ['诗词古文'], // 只有抖音支持该属性
+                    videoPath: ''
+                }
+            }
+        },
+        methods: {
             getBookList() {
                 let merge_flag = '史书典籍'
                 getRequest('/poetry/merge/info', { merge_flag }).then(res => {

@@ -20,6 +20,16 @@
         onLoad(options) {
             this.getMergeList()
         },
+        onShareAppMessage(shareOption) {
+            return {
+                title: '作者合称大全',
+                imageUrl: 'https://zhaoyj.work/image/ic_poetry_grade.png',
+                extra: {
+                    videoTopics: ['诗词古文'], // 只有抖音支持该属性
+                    videoPath: ''
+                }
+            }
+        },
         methods: {
             getMergeList() {
                 let merge_flag = '作者合称大全'
