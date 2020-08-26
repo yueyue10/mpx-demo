@@ -24,23 +24,23 @@
             grids: [{
                 title: '课本古诗',
                 url: 'grade/grade',
-                image: 'https://zhaoyj.work/image/ic_grade.jpg'
+                image: require('../../image/ic_grade.jpg')
             }, {
                 title: '排行榜',
                 url: 'rank/rank',
-                image: 'https://zhaoyj.work/image/ic_rank.jpg'
+                image: require('../../image/ic_bookmark.jpg')
             }, {
                 title: '诗词分类',
                 url: 'mark/list',
-                image: 'https://zhaoyj.work/image/ic_mark.jpg'
+                image: require('../../image/ic_mark.jpg')
             }, {
                 title: '作者合称',
                 url: 'hecheng/hecheng',
-                image: 'https://zhaoyj.work/image/ic_hecheng.jpg'
+                image: require('../../image/ic_hecheng.jpg')
             }, {
                 title: '史书典籍',
                 url: 'oldbook/oldbook',
-                image: 'https://zhaoyj.work/image/ic_bookmark.jpg'
+                image: require('../../image/ic_bookmark.jpg')
             }]
         },
         computed: {
