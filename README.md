@@ -4,12 +4,14 @@
 目前只发布到的`字节跳动`平台并且已经上线了，
 因为`微信`平台已经有原始的功能更全的小程序。
 
-> 字节跳动小程序地址
+> #### 字节跳动小程序地址
 >> 头条地址：[www.toutiao.com/..][2]
 >
 >> 抖音地址：[m.zjbyte.net/..][3]
 
-> 微信小程序地址
+![](http://a1.qpic.cn/psc?/V11wANeJ11xVDz/8v1c6OdZLSE3kzDE6fnRytJXweYfgk7ZKWqr5vPXVr.czDCGNXRsi9twY.pxAw4kV2ZRGhWfnpvTX.*npziB6NNtecvRzeBjiiwIC721V1I!/c&ek=1&kp=1&pt=0&bo=7gJqBO4CagQRADc!&tl=3&vuin=1650432983&tm=1598410800&sce=60-2-2&rf=0-0)
+
+> #### 微信小程序地址
 
 ![](https://user-gold-cdn.xitu.io/2020/7/22/17376c9d89543bc1?w=344&h=344&f=jpeg&s=72251)
 
