@@ -1,6 +1,17 @@
 # mpx-demo
 
-使用滴滴的[MPX框架][1]开发的多平台小程序项目
+使用滴滴的[MPX框架][1]开发的多平台小程序项目，
+目前只发布到的`字节跳动`平台并且已经上线了，
+因为`微信`平台已经有原始的功能更全的小程序。
+
+> 字节跳动小程序地址
+>> 头条地址：[www.toutiao.com/..][2]
+>
+>> 抖音地址：[m.zjbyte.net/..][3]
+
+> 微信小程序地址
+
+![](https://user-gold-cdn.xitu.io/2020/7/22/17376c9d89543bc1?w=344&h=344&f=jpeg&s=72251)
 
 ## 项目特点
 
@@ -13,12 +24,12 @@
 #### 1.小程序项目配置
 在`static`目录下的各小程序文件夹中配置对应平台的参数
 ```
-本项目只发布到的字节跳动平台
-在static/tt目录下的配置文件中配置了
+本项目只发布到的字节跳动平台，
+在static/tt目录下的配置文件中配置了：
 "appid"和"projectname"
 ```
 #### 2.项目运行配置
-在`package.json`中配置`watch:cross`命令对应的小程序平台
+在`package.json`中配置`watch:cross`编译命令对应的小程序平台
 #### 3.小程序代码模块
 * 1.页面注册
     > 在`src/app.mpx`中添加页面路径
@@ -28,8 +39,11 @@
     使用微信小程序的`wx.request`网络请求方法，`wx.showLoading`显示加载进度框
 * 3.页面编写
     > 在`src/pages/`下添加页面的`mpx`文件并编写
-    
-## 小程序页面代码编写
+
+
+
+## 小程序页面代码具体编写
+在`mpx`文件中编写
 #### 1.页面配置
 -原小程序的`json`文件中的代码
 ```
@@ -110,3 +124,5 @@ createPage({
 
 
 [1]:https://didi.github.io/mpx/
+[2]:https://www.toutiao.com/w/a1675861256381440/
+[3]:https://m.zjbyte.net/share/douyin/?token=fd69983627c9ccce649914577101606f&share_channel=copy
